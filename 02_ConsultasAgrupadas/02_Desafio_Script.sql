@@ -67,7 +67,6 @@ GROUP BY fecha
 ORDER BY sum(cantidad) DESC 
 FETCH FIRST 1 ROW ONLY
 
-
 /*CASO 7: ¿Qué días se inscribieron la mayor cantidad de personas utilizando el blog? ¿Cuántas
 personas fueron? - si hay más de un registro, tomar el primero*/
 SELECT fuente, fecha, SUM(cantidad) AS INSCRITOS FROM INSCRITOS 
@@ -77,9 +76,10 @@ ORDER BY SUM(cantidad)
 DESC LIMIT 1
 
 /*CASO 8: ¿Cuál es el promedio de personas inscritas por día? */
-SELECT fecha, ROUND(AVG(cantidad),0) AS PROMEDIO FROM INSCRITOS
-GROUP BY fecha
-ORDER BY fecha;
+SELECT ROUND(avg(query.promedio)) as PROMEDIO_TOTAL FROM
+	(SELECT fecha, ROUND(AVG(cantidad),0) AS PROMEDIO FROM INSCRITOS
+	GROUP BY fecha) as query
+
 
 
 /*CASO 9: ¿Qué días se inscribieron más de 50 personas?*/
@@ -89,7 +89,8 @@ HAVING sum(cantidad)>50
 ORDER BY fecha
 /*CASO 10: ¿Cuál es el promedio diario de personas inscritas a partir del tercer día en adelante,
 considerando únicamente las fechas posteriores o iguales a la indicada?*/
-SELECT fecha, ROUND(AVG(cantidad),0) AS PROMEDIO FROM INSCRITOS
-WHERE fecha >= '2021-03-01'
-GROUP BY fecha
-ORDER BY fecha;
+SELECT * FROM
+	(SELECT fecha, ROUND(AVG(cantidad),0) AS PROMEDIO FROM INSCRITOS
+	GROUP BY fecha
+	ORDER BY fecha) AS query
+WHERE query.fecha >= '2021-03-01'
