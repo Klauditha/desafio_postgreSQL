@@ -137,16 +137,19 @@ cantidad de posts de cada usuario.
 6. Muestra la fecha del último post de cada usuario.
  (debe mostrar email usuario, el titulo del post y fecha de creacion)
 */
-    SELECT 
+      SELECT 
         U.email, 
         P.titulo, 
         MAX(P.fecha_creacion) AS fecha_creacion
     FROM Usuarios U 
-    JOIN Posts P ON U.id = P.usuario_id
-    WHERE P.fecha_creacion IN (SELECT MAX(fecha_creacion) FROM Posts
-							  GROUP BY usuario_id)
+	JOIN Posts P ON U.id = P.usuario_id
+	JOIN (  SELECT usuario_id,MAX(fecha_creacion) AS fecha_maxima 
+            FROM Posts
+            GROUP BY usuario_id ) query
+	ON query.usuario_id = U.id 
+        AND query.fecha_maxima = P.fecha_creacion						  
     GROUP BY U.email, P.titulo
-
+ 
 /*
 7. Muestra el título y contenido del post (artículo) con más comentarios.
 (debe mostrar titulo del post, contenido del post y cantidad de comentarios)
