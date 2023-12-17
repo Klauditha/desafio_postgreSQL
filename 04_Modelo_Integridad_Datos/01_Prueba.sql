@@ -190,3 +190,44 @@ TABLESPACE pg_default;
 
 ALTER TABLE IF EXISTS public."Respuestas"
     OWNER to postgres;
+
+
+/*
+5. Agrega 5 usuarios y 5 preguntas.
+La primera pregunta debe estar respondida correctamente dos veces, por dos
+usuarios diferentes.
+b. La segunda pregunta debe estar contestada correctamente solo por un
+usuario.
+c. Las otras tres preguntas deben tener respuestas incorrectas.
+Contestada correctamente significa que la respuesta indicada en la tabla respuestas
+es exactamente igual al texto indicado en la tabla de preguntas.
+*/
+
+/*Insertar datos en Usuarios*/
+INSERT INTO public."Usuarios"(nombre, edad)
+VALUES
+    ('Pepito', 20),
+    ('Juanito', 30),
+    ('Pedrito', 40),
+    ('Luisito', 50),
+    ('Miguelito', 60);
+
+/*Insertar datos en Preguntas*/
+INSERT INTO public."Preguntas"(pregunta, respuesta_correcta)
+VALUES
+    ('¿Cual es la capital de Chile?', 'Santiago'),
+    ('¿Cuantas regiones tiene Chile?', '16'),
+    ('¿Cual es el nombre del Presidente de Chile?', 'Gabriel Boric'),
+    ('¿Hace calor en verano?', 'Si'),
+    ('¿Hace frio en invierno?', 'Si');   
+
+/*Insertar datos en Respuestas*/
+INSERT INTO public."Respuestas"(respuesta, usuario_id, pregunta_id)
+VALUES
+    ('Santiago', 1, 1),
+    ('Santiago', 2, 1),
+	('16', 3, 2),
+	('Michelle Bachelet', 4, 3),
+	('No', 5, 4),
+	('No', 1, 5);
+
