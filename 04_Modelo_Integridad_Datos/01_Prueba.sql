@@ -237,11 +237,26 @@ VALUES
 pregunta).
 */
 
-SELECT U.nombre, COUNT(P.pregunta) AS CANTIDAD_PREGUNTAS_CORRECTAS
+SELECT U.nombre, COUNT(P.pregunta) AS CANTIDAD_RESPUESTAS_CORRECTAS
 FROM public."Usuarios" U
 JOIN public."Respuestas" R  ON
 	U.id = R.usuario_id 
-LEFT JOIN public."Preguntas" P on
+LEFT JOIN public."Preguntas" P ON
 P.id = R.pregunta_id 
 	AND P.respuesta_correcta = R.respuesta
 GROUP BY U.nombre
+
+/*
+7. Por cada pregunta, en la tabla preguntas, cuenta cuántos usuarios respondieron
+correctamente.
+*/
+
+SELECT P.pregunta, COUNT(U.nombre) AS CANTIDAD_USUARIOS_RESPUESTAS_CORRECTAS
+FROM public."Preguntas" P
+JOIN public."Respuestas" R  ON
+	P.id = R.pregunta_id 
+LEFT JOIN public."Usuarios" U ON
+	U.id = R.usuario_id 
+	AND P.respuesta_correcta = R.respuesta
+GROUP BY P.pregunta
+
