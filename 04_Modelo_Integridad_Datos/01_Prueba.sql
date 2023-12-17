@@ -231,3 +231,17 @@ VALUES
 	('No', 5, 4),
 	('No', 1, 5);
 
+
+/*
+6. Cuenta la cantidad de respuestas correctas totales por usuario (independiente de la
+pregunta).
+*/
+
+SELECT U.nombre, COUNT(P.pregunta) AS CANTIDAD_PREGUNTAS_CORRECTAS
+FROM public."Usuarios" U
+JOIN public."Respuestas" R  ON
+	U.id = R.usuario_id 
+LEFT JOIN public."Preguntas" P on
+P.id = R.pregunta_id 
+	AND P.respuesta_correcta = R.respuesta
+GROUP BY U.nombre
