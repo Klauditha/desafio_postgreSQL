@@ -68,3 +68,39 @@ TABLESPACE pg_default;
 
 ALTER TABLE IF EXISTS public."Peliculas_Tags"
     OWNER to postgres;
+
+
+/*
+2. Inserta 5 películas y 5 tags; la primera película debe tener 3 tags asociados, la
+segunda película debe tener 2 tags asociados.
+
+*/
+
+/* Insertar datos en Peliculas */
+INSERT INTO public."Peliculas"(nombre, anno)
+VALUES 
+	('Fuera del mapa', 2020),
+	('Nace una estrella', 2018),
+	('Free Guy: Tomando el control', 2021),
+	('La memoria infinita', 2023),
+	('Barbie', 2023);
+
+/* Insertar datos en Tags */
+INSERT INTO public."Tags"(tag)
+VALUES
+    ('Comedia'),
+    ('Accion'),
+    ('Drama'),
+    ('Suspense'),
+    ('Animacion');
+
+
+/* Insertar datos en Peliculas_Tags */
+INSERT INTO public."Peliculas_Tags"(pelicula_id, tags_id)
+VALUES
+	(1,2),
+	(1,3),
+	(1,4),
+	(2,3),
+	(2,4);
+
