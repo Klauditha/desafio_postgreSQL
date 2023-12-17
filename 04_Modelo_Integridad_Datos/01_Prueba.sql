@@ -104,3 +104,17 @@ VALUES
 	(2,3),
 	(2,4);
 
+/*
+
+3. Cuenta la cantidad de tags que tiene cada película. Si una película no tiene tags debe
+mostrar 0.
+
+*/
+
+SELECT P.nombre, COUNT(T.tag) AS CANTIDAD_TAGS
+FROM public."Peliculas" P
+LEFT JOIN  public."Peliculas_Tags" PT 
+    ON P.id = PT.pelicula_id
+LEFT JOIN  public."Tags" T 
+    ON PT.tags_id = T.id
+GROUP BY P.nombre
