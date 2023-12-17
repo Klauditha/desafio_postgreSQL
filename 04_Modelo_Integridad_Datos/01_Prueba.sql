@@ -270,3 +270,32 @@ ALTER TABLE public."Respuestas" DROP CONSTRAINT usuario_fkey, ADD FOREIGN KEY
 
 DELETE FROM public."Usuarios"
 WHERE id = 1
+
+/*
+9. Crea una restricción que impida insertar usuarios menores de 18 años en la base de
+datos.
+*/
+ALTER TABLE IF EXISTS public."Usuarios"
+    ADD CONSTRAINT "edadMayor18" CHECK (edad>=18)
+    NOT VALID;
+
+INSERT INTO public."Usuarios"(nombre, edad)
+VALUES
+    ('Feña', 15)
+
+/*
+10. Altera la tabla existente de usuarios agregando el campo email. Debe tener la
+restricción de ser único.
+*/
+
+ALTER TABLE IF EXISTS public."Usuarios"
+    ADD COLUMN email character varying;
+ALTER TABLE IF EXISTS public."Usuarios"
+    ADD CONSTRAINT "mailUnico" UNIQUE (email);
+
+
+INSERT INTO public."Usuarios"(
+	nombre, edad, email)
+	VALUES 
+	('Andres', 20, 'andres@gmail.com'),
+	('Andres', 21, 'andres@gmail.com');
