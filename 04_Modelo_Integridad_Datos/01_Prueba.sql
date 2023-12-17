@@ -118,3 +118,75 @@ LEFT JOIN  public."Peliculas_Tags" PT
 LEFT JOIN  public."Tags" T 
     ON PT.tags_id = T.id
 GROUP BY P.nombre
+
+
+/*
+4. Crea las tablas correspondientes respetando los nombres, tipos, claves primarias y
+foráneas y tipos de datos.
+*/
+
+/* Tabla Preguntas */
+
+-- Table: public.Preguntas
+
+-- DROP TABLE IF EXISTS public."Preguntas";
+
+CREATE TABLE IF NOT EXISTS public."Preguntas"
+(
+    id integer NOT NULL DEFAULT nextval('"Preguntas_id_seq"'::regclass),
+    pregunta character varying(255) COLLATE pg_catalog."default",
+    respuesta_correcta character varying COLLATE pg_catalog."default",
+    CONSTRAINT preguntas_pkey PRIMARY KEY (id)
+)
+
+TABLESPACE pg_default;
+
+ALTER TABLE IF EXISTS public."Preguntas"
+    OWNER to postgres;
+
+/* Tabla Usuarios */
+
+-- Table: public.Usuarios
+
+-- DROP TABLE IF EXISTS public."Usuarios";
+
+CREATE TABLE IF NOT EXISTS public."Usuarios"
+(
+    id integer NOT NULL DEFAULT nextval('"Usuarios_id_seq"'::regclass),
+    nombre character varying(255) COLLATE pg_catalog."default",
+    edad integer,
+    CONSTRAINT usuarios_pkey PRIMARY KEY (id)
+)
+
+TABLESPACE pg_default;
+
+ALTER TABLE IF EXISTS public."Usuarios"
+    OWNER to postgres;
+
+/* Tabla Respuestas */
+
+-- Table: public.Respuestas
+
+-- DROP TABLE IF EXISTS public."Respuestas";
+
+CREATE TABLE IF NOT EXISTS public."Respuestas"
+(
+    id integer NOT NULL DEFAULT nextval('"Respuestas_id_seq"'::regclass),
+    respuesta character varying(255) COLLATE pg_catalog."default",
+    usuario_id integer,
+    pregunta_id integer,
+    CONSTRAINT respuestas_pkey PRIMARY KEY (id),
+    CONSTRAINT pregunta_fkey FOREIGN KEY (pregunta_id)
+        REFERENCES public."Preguntas" (id) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION,
+    CONSTRAINT usuario_fkey FOREIGN KEY (usuario_id)
+        REFERENCES public."Usuarios" (id) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION
+)
+
+TABLESPACE pg_default;
+
+ALTER TABLE IF EXISTS public."Respuestas"
+    OWNER to postgres;
