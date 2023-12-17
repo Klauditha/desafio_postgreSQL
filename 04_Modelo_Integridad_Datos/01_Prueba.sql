@@ -260,3 +260,13 @@ LEFT JOIN public."Usuarios" U ON
 	AND P.respuesta_correcta = R.respuesta
 GROUP BY P.pregunta
 
+/*
+8.Implementa un borrado en cascada de las respuestas al borrar un usuario. Prueba la
+implementación borrando el primer usuario.
+*/
+
+ALTER TABLE public."Respuestas" DROP CONSTRAINT usuario_fkey, ADD FOREIGN KEY
+(usuario_id) REFERENCES public."Usuarios"(id) ON DELETE CASCADE;
+
+DELETE FROM public."Usuarios"
+WHERE id = 1
