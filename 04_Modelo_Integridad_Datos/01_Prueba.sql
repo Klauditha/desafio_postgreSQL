@@ -7,47 +7,24 @@ primarias, foráneas y tipos de datos.
 
 /*Tabla Peliculas*/
 
--- Table: public.Peliculas
-
--- DROP TABLE IF EXISTS public."Peliculas";
-
 CREATE TABLE IF NOT EXISTS public."Peliculas"
 (
-    id integer NOT NULL DEFAULT nextval('"Peliculas_id_seq"'::regclass),
-    nombre character varying(255) COLLATE pg_catalog."default",
+    id serial,
+    nombre character varying(255),
     anno integer,
     CONSTRAINT "Peliculas_pkey" PRIMARY KEY (id)
-)
-
-TABLESPACE pg_default;
-
-ALTER TABLE IF EXISTS public."Peliculas"
-    OWNER to postgres;
+);
 
 /*Tabla Tags*/    
 
--- Table: public.Tags
-
--- DROP TABLE IF EXISTS public."Tags";
-
 CREATE TABLE IF NOT EXISTS public."Tags"
 (
-    id integer NOT NULL DEFAULT nextval('"Tags_id_seq"'::regclass),
-    tag character varying(32) COLLATE pg_catalog."default",
+    id serial,
+    tag character varying(32) ,
     CONSTRAINT tags_pkey PRIMARY KEY (id)
-)
-
-TABLESPACE pg_default;
-
-ALTER TABLE IF EXISTS public."Tags"
-    OWNER to postgres;
-
+);
 
 /* Tabla Peliculas_Tags */
-
--- Table: public.Peliculas_Tags
-
--- DROP TABLE IF EXISTS public."Peliculas_Tags";
 
 CREATE TABLE IF NOT EXISTS public."Peliculas_Tags"
 (
@@ -55,19 +32,13 @@ CREATE TABLE IF NOT EXISTS public."Peliculas_Tags"
     tags_id integer NOT NULL,
     CONSTRAINT peliculas_tags_pkey PRIMARY KEY (pelicula_id, tags_id),
     CONSTRAINT peliculas_id_fkey FOREIGN KEY (pelicula_id)
-        REFERENCES public."Peliculas" (id) MATCH SIMPLE
-        ON UPDATE CASCADE
-        ON DELETE CASCADE,
+        REFERENCES public."Peliculas" (id) ,
+        
     CONSTRAINT tags_id_fkey FOREIGN KEY (tags_id)
-        REFERENCES public."Tags" (id) MATCH SIMPLE
-        ON UPDATE CASCADE
-        ON DELETE CASCADE
-)
+        REFERENCES public."Tags" (id) 
+        
+);
 
-TABLESPACE pg_default;
-
-ALTER TABLE IF EXISTS public."Peliculas_Tags"
-    OWNER to postgres;
 
 
 /*
@@ -93,7 +64,6 @@ VALUES
     ('Drama'),
     ('Suspense'),
     ('Animacion');
-
 
 /* Insertar datos en Peliculas_Tags */
 INSERT INTO public."Peliculas_Tags"(pelicula_id, tags_id)
@@ -127,70 +97,40 @@ foráneas y tipos de datos.
 
 /* Tabla Preguntas */
 
--- Table: public.Preguntas
-
--- DROP TABLE IF EXISTS public."Preguntas";
-
 CREATE TABLE IF NOT EXISTS public."Preguntas"
 (
-    id integer NOT NULL DEFAULT nextval('"Preguntas_id_seq"'::regclass),
-    pregunta character varying(255) COLLATE pg_catalog."default",
-    respuesta_correcta character varying COLLATE pg_catalog."default",
+    id serial,
+    pregunta character varying(255) ,
+    respuesta_correcta character varying ,
     CONSTRAINT preguntas_pkey PRIMARY KEY (id)
 )
 
-TABLESPACE pg_default;
-
-ALTER TABLE IF EXISTS public."Preguntas"
-    OWNER to postgres;
-
 /* Tabla Usuarios */
-
--- Table: public.Usuarios
-
--- DROP TABLE IF EXISTS public."Usuarios";
 
 CREATE TABLE IF NOT EXISTS public."Usuarios"
 (
-    id integer NOT NULL DEFAULT nextval('"Usuarios_id_seq"'::regclass),
-    nombre character varying(255) COLLATE pg_catalog."default",
+    id serial,
+    nombre character varying(255) ,
     edad integer,
     CONSTRAINT usuarios_pkey PRIMARY KEY (id)
 )
 
-TABLESPACE pg_default;
-
-ALTER TABLE IF EXISTS public."Usuarios"
-    OWNER to postgres;
 
 /* Tabla Respuestas */
 
--- Table: public.Respuestas
-
--- DROP TABLE IF EXISTS public."Respuestas";
 
 CREATE TABLE IF NOT EXISTS public."Respuestas"
 (
-    id integer NOT NULL DEFAULT nextval('"Respuestas_id_seq"'::regclass),
-    respuesta character varying(255) COLLATE pg_catalog."default",
+    id serial,
+    respuesta character varying(255),
     usuario_id integer,
     pregunta_id integer,
     CONSTRAINT respuestas_pkey PRIMARY KEY (id),
     CONSTRAINT pregunta_fkey FOREIGN KEY (pregunta_id)
-        REFERENCES public."Preguntas" (id) MATCH SIMPLE
-        ON UPDATE NO ACTION
-        ON DELETE NO ACTION,
+        REFERENCES public."Preguntas" (id),
     CONSTRAINT usuario_fkey FOREIGN KEY (usuario_id)
-        REFERENCES public."Usuarios" (id) MATCH SIMPLE
-        ON UPDATE NO ACTION
-        ON DELETE NO ACTION
+        REFERENCES public."Usuarios" (id) 
 )
-
-TABLESPACE pg_default;
-
-ALTER TABLE IF EXISTS public."Respuestas"
-    OWNER to postgres;
-
 
 /*
 5. Agrega 5 usuarios y 5 preguntas.
@@ -228,9 +168,8 @@ VALUES
     ('Santiago', 2, 1),
 	('16', 3, 2),
 	('Michelle Bachelet', 4, 3),
-	('No', 5, 4),
-	('No', 1, 5);
-
+	('No', 5, 4);
+	
 
 /*
 6. Cuenta la cantidad de respuestas correctas totales por usuario (independiente de la
@@ -253,7 +192,7 @@ correctamente.
 
 SELECT P.pregunta, COUNT(U.nombre) AS CANTIDAD_USUARIOS_RESPUESTAS_CORRECTAS
 FROM public."Preguntas" P
-JOIN public."Respuestas" R  ON
+LEFT JOIN public."Respuestas" R  ON
 	P.id = R.pregunta_id 
 LEFT JOIN public."Usuarios" U ON
 	U.id = R.usuario_id 
